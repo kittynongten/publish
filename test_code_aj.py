@@ -20,24 +20,17 @@ text = [input('\nข้อความ : ')]
 print(text[0])
 
 def clean_msg(msg):
-    
-    
     # ลบ text ที่อยู่ในวงเล็บ <> ทั้งหมด
-    msg = re.sub(r'<.*?>','', msg)
-    
+    msg = re.sub(r'<.*?>','', msg)  
     # ลบ hashtag
-    msg = re.sub(r'#','',msg)
-    
+    msg = re.sub(r'#','',msg)  
     # ลบ …
-    msg = re.sub(r'…','',msg)
-    
+    msg = re.sub(r'…','',msg)   
     # ลบ เครื่องหมายคำพูด (punctuation)
     for c in string.punctuation:
         msg = re.sub(r'\{}'.format(c),'',msg)
-    
     # ลบ separator เช่น \n \t
     msg = ' '.join(msg.split())
-    
     return msg
 
 clean_text = [clean_msg(txt) for txt in text]
@@ -52,17 +45,17 @@ p_stemmer = PorterStemmer()
 
 def split_word(text):
             
-    
     tokens = word_tokenize(text,engine='newmm')
     
     # Remove stop words ภาษาไทย และภาษาอังกฤษ
     tokens = [i for i in tokens if not i in th_stop and not i in en_stop]
     #tokens = [i for i in tokens ]
+    print("stop word: " ,tokens)
     
     # หารากศัพท์ภาษาไทย และภาษาอังกฤษ
     # English
     tokens = [p_stemmer.stem(i) for i in tokens]
-    
+    print("EN word: " ,tokens)
 
     # Thai
     tokens_temp=[]
