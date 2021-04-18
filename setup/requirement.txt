@@ -3,4 +3,4 @@ nltk
 pytest
 pythainlp
 pickle-mixin
-stop_words
+langdetect
