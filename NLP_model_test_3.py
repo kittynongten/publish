@@ -13,25 +13,23 @@ listpos  = []
 listneg  = []
 listneu  = []
 
-with codecs.open('.//data/positive.txt', 'r', "utf-8") as file: 
+with codecs.open('.//data/Dpositive.txt', 'r', "utf-8") as file: 
     line = file.readlines()
 positive = [e.strip() for e in line]
 for i in range(3):
     for word in positive : listpos.append(word)
 file.close()
 
-with codecs.open('.//data/negative.txt', 'r', "utf-8") as file:
+with codecs.open('.//data/Dnegative.txt', 'r', "utf-8") as file:
     line = file.readlines()
 negative = [e.strip() for e in line]
 for i in range(3):
     for word in negative: listneg.append(word)
 file.close()
 
-with codecs.open('.//data/neutral.txt', 'r', "utf-8") as file:
+with codecs.open('.//data/Dneutral.txt', 'r', "utf-8") as file:
     line = file.readlines()
-neutral  = [e.strip() for e in line]
-for i in range(1):
-    for word in neutral: listneu.append(word)
+listneu  = [e.strip() for e in line]
 file.close()
 
 pos = ['pos']*len(listpos)
@@ -39,13 +37,13 @@ neg = ['neg']*len(listneg)
 neu = ['neu']*len(listneg)
 
 training_data = list(zip(listpos,pos)) + list(zip(listneg,neg))  + list(zip(listneu,neu))
-print("\n#Step 1 : training_data ")
+print("\n\n\n#Step 1 : training_data\n\n\n ")
 vocabulary = set(chain(*[word_tokenize(i[0].lower()) for i in training_data]))
-print("\n#Step 2 : vocabulary ")
+print("\n#Step 2 : vocabulary\n ")
 feature_set = [({i:(i in word_tokenize(sentence.lower())) for i in vocabulary},sentiment) for sentence, sentiment in training_data]
-print("\n#Step 3 : feature_set ")
+print("\n#Step 3 : feature_set\n ")
 features_data = numpy.array(feature_set)
-print("\n#Step 4 : features_data")
+print("\n#Step 4 : features_data\n ")
 
 print("\n#Step 5 : train & test\n ")
 accuracy_score_total = 0
@@ -84,7 +82,7 @@ for train_set, test_set in k_fold.split(features_data):
     ))
     print('Recall     [{:f}     {:f}     {:f}]'.format(
         recall(refsets['pos'], testsets['pos']),
-        recall(refsets['neu'], testsets['neu']),
+        precision(refsets['neu'], testsets['neu']),
         recall(refsets['neg'], testsets['neg'])
     ))
     print('===============================================\n')
@@ -92,7 +90,11 @@ for train_set, test_set in k_fold.split(features_data):
 accuracy_score_average = accuracy_score_total/rounds
 print(">> accuracy_score_average : ",accuracy_score_average)
 
-model = './/model/nlp-model.pkl'
-pickle.dump(prediction, open(model, 'wb'))
-vocabularys = './/model/vocabulary.pkl'
-pickle.dump(vocabulary, open(vocabularys, 'wb'))
+test_sentence = input('\nข้อความ : ') 
+while (test_sentence != 'exit'):
+    featurized_test_sentence =  {i:(i in word_tokenize(test_sentence.lower())) for i in vocabulary} 
+    print("test_sentence : ",test_sentence) 
+    print("word_tokenize : ",word_tokenize(test_sentence.lower()))
+    print("sentiment : ",prediction.classify(featurized_test_sentence))  
+    test_sentence = input('\nข้อความ : ') 
+       

@@ -1,1 +1,1 @@
-accuracy_total = 0.00
+test_sentence = input('\nข้อความ : ') # รับ input
